@@ -1,25 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState , useEffect } from 'react'
+import Header from './Header'
+import Users from './Users'
 
-function App() {
+export default function App() {
+  const [logo, setLogo] = useState("https://mevive.webindia.com/images/logo-dark.png")
+  const [menu, setMenu] = useState(["Home"])
+  const [UserDatas, setUserDatas] = useState([])
+
+  useEffect(()=>{
+    let SearchData = fetch("https://api.github.com/users")
+    SearchData.then(GitData=>{
+      GitData.json().then(UserDatas=>{
+          setUserDatas(UserDatas)
+      })
+    })
+   
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Header logo={logo}  menu={menu}/>
+      <div className='container'>
+      
+      <Users UserDatas={UserDatas}/>
+     
+      </div>
     </div>
-  );
+  )
 }
-
-export default App;
